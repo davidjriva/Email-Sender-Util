@@ -1,0 +1,8 @@
+Hello {name},
+
+Thank you for providing your email address: {email}.
+
+Best regards,
+
+Your Company
+

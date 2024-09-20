@@ -1,14 +1,34 @@
 import React, { useState } from "react";
-import { Box, TextField, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import InputField from "./InputField";
 
 const InputForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(`Name: ${name}, Email: ${email}`);
+
+    try {
+      const response = await fetch("/example_email.txt");
+      if (!response.ok) throw new Error("Failed to fetch email template");
+
+      const template = await response.text();
+      
+      // Replace placeholders in the email template with actual values
+      const populatedEmail = template
+        .replace(/{name}/g, name)
+        .replace(/{email}/g, email);
+
+      const ccEmail = "exampleCC@gmail.com"
+      // Encode the populated email template for use in the mailto link
+      const mailtoLink = `mailto:${email}?cc=${ccEmail}&subject=Example%20Subject&body=${encodeURIComponent(populatedEmail)}`;
+
+      // Open the default email client with the populated email
+      window.location.href = mailtoLink;
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -26,19 +46,10 @@ const InputForm = () => {
         borderRadius: "8px",
       }}
     >
-      <InputForm
-        label="name"
-        value={name}
-        setValue={setName}
-      />
-      <TextField
-        label="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        variant="outlined"
-        type="email"
-        required
-      />
+      <InputField label="Name" value={name} setValue={setName} />
+
+      <InputField label="Email" value={email} setValue={setEmail} />
+
       <Button variant="contained" color="primary" type="submit">
         Create Email
       </Button>

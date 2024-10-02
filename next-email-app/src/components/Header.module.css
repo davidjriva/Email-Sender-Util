@@ -1,0 +1,22 @@
+/* src/components/Header.module.css */
+.header {
+    background: var(--foreground);
+    color: var(--background);
+    padding: 0.5rem; /* Reduced padding */
+}
+
+.nav {
+    display: flex;
+    justify-content: space-around;
+}
+
+.nav a {
+    color: var(--background);
+    padding: 0.5rem; /* Reduced padding */
+    transition: background-color 0.3s;
+}
+
+.nav a:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+}
+  

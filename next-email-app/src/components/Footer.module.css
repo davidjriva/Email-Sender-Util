@@ -1,0 +1,10 @@
+.footer {
+    background: var(--foreground);
+    color: var(--background);
+    text-align: center;
+    padding: 0.5rem; /* Reduced padding */
+    position: relative; /* Keep this if you want normal flow */
+    bottom: 0; /* Use if you want it at the bottom */
+    width: 100%;
+}
+  

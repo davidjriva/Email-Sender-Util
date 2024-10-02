@@ -13,24 +13,19 @@ const EmailInputForm = () => {
 
     try {
       const template = `
-      Hello {name},
+      Hello ${name},
 
-      Thank you for providing your email address: {email}.
+      Thank you for providing your email address: ${email}.
 
       Best regards,
 
       Your Company
       `;
 
-      // Replace placeholders in the email template with actual values
-      const populatedEmail = template
-        .replace(/{name}/g, name)
-        .replace(/{email}/g, email);
-
       const ccEmail = "exampleCC@gmail.com";
       // Encode the populated email template for use in the mailto link
       const mailtoLink = `mailto:${email}?cc=${ccEmail}&subject=Example%20Subject&body=${encodeURIComponent(
-        populatedEmail
+        template
       )}`;
 
       // Open the default email client with the populated email

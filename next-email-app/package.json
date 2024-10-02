@@ -2,7 +2,7 @@
   "name": "next-email-app",
   "author": "David Riva",
   "description": "A standalone email utility tool built with Next.js and Electron",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "index.js",
   "private": true,
   "scripts": {

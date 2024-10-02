@@ -1,12 +1,11 @@
 import styles from "./page.module.css";
-import EmailInputForm from "../components/EmailInputForm";
+import EmailContainer from "../components/EmailContainer";
 
 const EmailPage = () => {
   return (
-    <div className={styles.emailPage}>
+    <div>
       <main className={styles.main}>
-        <h1> Create an Email </h1>
-        <EmailInputForm />
+        <EmailContainer />
       </main>
     </div>
   );

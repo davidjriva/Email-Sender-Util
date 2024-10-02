@@ -1,13 +1,35 @@
-import Link from 'next/link';
-import styles from './Header.module.css';
+// src/components/Header.tsx
+import React from "react";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Link from "next/link";
+import { Container } from "@mui/material";
+import styles from "./Header.module.css"; // Import the CSS module
 
 const Header = () => {
+  const additionalPages = ["About", "Email"];
+
   return (
     <header className={styles.header}>
-      <nav className={styles.nav}>
-        <Link href="/">Home</Link>
-        <Link href="/about">About</Link>
-      </nav>
+      <Container>
+        <Toolbar className={styles.nav}>
+          <Typography variant="h6">
+            <Link href="/" className={styles.nav}>
+              Home
+            </Link>
+          </Typography>
+
+          {additionalPages.map((page) => (
+            <Typography key={page} variant="h6">
+              <Link href={`/${page.toLowerCase()}`} className={styles.nav}>
+                {page}
+              </Link>
+            </Typography>
+          ))}
+
+        </Toolbar>
+      </Container>
     </header>
   );
 };

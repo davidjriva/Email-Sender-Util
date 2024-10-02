@@ -1,15 +1,15 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import StyledDivider from "../components/StyledDivider";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 
 const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
+  src: "../../public/fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
 const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+  src: "../../public/fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
 });
@@ -28,16 +28,8 @@ export default function RootLayout({ children }) {
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Header />
-        <main
-          style={{
-            flex: 1,
-            overflowY: "auto",
-            maxHeight: "calc(100vh - 84px)",
-          }}
-        >
-          {children}
-        </main>{" "}
-        <Footer />
+        <StyledDivider />
+        <main>{children}</main>
       </body>
     </html>
   );

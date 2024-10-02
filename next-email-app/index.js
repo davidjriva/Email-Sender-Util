@@ -12,7 +12,7 @@ function createWindow() {
     });
 
     // Load your Next.js app
-    mainWindow.loadURL('file://' + path.join(__dirname, 'index.html')); // Change this according to your exported app location
+    mainWindow.loadURL('file://' + path.join(__dirname, '/out/index.html')); // Change this according to your exported app location
 }
 
 // This event fires when Electron has finished initialization

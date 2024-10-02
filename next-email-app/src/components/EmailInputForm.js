@@ -12,10 +12,15 @@ const EmailInputForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("/text/example_email.txt");
-      if (!response.ok) throw new Error("Failed to fetch email template");
+      const template = `
+      Hello {name},
 
-      const template = await response.text();
+      Thank you for providing your email address: {email}.
+
+      Best regards,
+
+      Your Company
+      `;
 
       // Replace placeholders in the email template with actual values
       const populatedEmail = template

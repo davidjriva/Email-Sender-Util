@@ -13,6 +13,16 @@
     "export": "next export",
     "dist": "electron-builder"
   },
+  "build": {
+    "appId": "com.yourname.nextemailapp",
+    "productName": "Next Email App",
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  },
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
@@ -21,5 +31,9 @@
     "next": "14.2.14",
     "react": "^18",
     "react-dom": "^18"
+  },
+  "devDependencies": {
+    "electron": "^32.1.2",
+    "electron-builder": "^25.0.5"
   }
 }

@@ -1,12 +1,17 @@
 {
   "name": "next-email-app",
+  "author": "David Riva",
+  "description": "A standalone email utility tool built with Next.js and Electron",
   "version": "0.1.0",
+  "main": "index.js",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "next export",
+    "dist": "electron-builder"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",

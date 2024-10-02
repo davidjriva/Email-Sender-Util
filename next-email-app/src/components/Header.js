@@ -8,7 +8,7 @@ import { Container } from "@mui/material";
 import styles from "./Header.module.css"; // Import the CSS module
 
 const Header = () => {
-  const additionalPages = ["About", "Email"];
+  const additionalPages = ["Page 2", "Page 3"];
 
   return (
     <header className={styles.header}>

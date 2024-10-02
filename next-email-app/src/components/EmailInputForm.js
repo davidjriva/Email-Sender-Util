@@ -12,20 +12,20 @@ const EmailInputForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("/text/example_email.txt");
-      if (!response.ok) throw new Error("Failed to fetch email template");
+      const template = `
+      Hello ${name},
 
-      const template = await response.text();
+      Thank you for providing your email address: ${email}.
 
-      // Replace placeholders in the email template with actual values
-      const populatedEmail = template
-        .replace(/{name}/g, name)
-        .replace(/{email}/g, email);
+      Best regards,
+
+      Your Company
+      `;
 
       const ccEmail = "exampleCC@gmail.com";
       // Encode the populated email template for use in the mailto link
       const mailtoLink = `mailto:${email}?cc=${ccEmail}&subject=Example%20Subject&body=${encodeURIComponent(
-        populatedEmail
+        template
       )}`;
 
       // Open the default email client with the populated email

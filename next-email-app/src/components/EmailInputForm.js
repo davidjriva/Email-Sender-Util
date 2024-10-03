@@ -21,7 +21,7 @@ const EmailInputForm = () => {
 
       Here is some text:
 
-      ${text}
+      ${text.replace(/\*/g, "•")}
 
       Best regards,
 

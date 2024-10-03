@@ -53,8 +53,9 @@ const EmailInputForm = () => {
         margin: "0 auto",
         gap: "1rem",
         padding: "2rem",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "#F1F3F4",
         borderRadius: "8px",
+        boxShadow: "0 0 15px rgba(128, 128, 128, 0.5)",
       }}
     >
       <InputField label="Name" value={name} setValue={setName} />

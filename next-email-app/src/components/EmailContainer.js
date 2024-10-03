@@ -3,16 +3,18 @@ import EmailInputForm from "../components/EmailInputForm";
 
 const EmailContainer = () => {
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh", // Full height of the viewport
+        height: "100vh", // Full height of the viewport
+        width: "100vw", // Full width of the viewport
+        backgroundColor: "#202124", // Set the background color
       }}
     >
       <EmailInputForm />
-    </Box>
+    </div>
   );
 };
 

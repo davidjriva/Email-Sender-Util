@@ -4,7 +4,7 @@ import EmailContainer from "../components/EmailContainer";
 const EmailPage = () => {
   return (
     <div>
-      <main className={styles.main}>
+      <main>
         <EmailContainer />
       </main>
     </div>

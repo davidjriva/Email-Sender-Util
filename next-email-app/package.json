@@ -30,8 +30,10 @@
     "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.1.1",
     "next": "14.2.14",
-    "react": "^18",
-    "react-dom": "^18"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "slate": "^0.103.0",
+    "slate-react": "^0.110.1"
   },
   "devDependencies": {
     "electron": "^32.1.2",

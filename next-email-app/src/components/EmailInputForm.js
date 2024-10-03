@@ -3,10 +3,12 @@
 import React, { useState } from "react";
 import { Box, Button } from "@mui/material";
 import InputField from "./InputField";
+import TextInputField from "./TextInputField";
 
 const EmailInputForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [text, setText] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,6 +18,10 @@ const EmailInputForm = () => {
       Hello ${name},
 
       Thank you for providing your email address: ${email}.
+
+      Here is some text:
+
+      ${text}
 
       Best regards,
 
@@ -43,17 +49,21 @@ const EmailInputForm = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        width: "300px",
+        width: "450px",
         margin: "0 auto",
         gap: "1rem",
         padding: "2rem",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "#F1F3F4",
         borderRadius: "8px",
+        boxShadow: "0 0 15px rgba(128, 128, 128, 0.5)",
       }}
     >
       <InputField label="Name" value={name} setValue={setName} />
       <InputField label="Email" value={email} setValue={setEmail} />
-      <Button variant="contained" color="primary" type="submit">
+
+      <TextInputField text={text} setText={setText} />
+
+      <Button variant="contained" type="submit" color="primary">
         Create Email
       </Button>
     </Box>

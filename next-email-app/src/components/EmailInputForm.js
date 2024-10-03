@@ -59,7 +59,9 @@ const EmailInputForm = () => {
     >
       <InputField label="Name" value={name} setValue={setName} />
       <InputField label="Email" value={email} setValue={setEmail} />
+
       <TextInputField text={text} setText={setText} />
+
       <Button variant="contained" color="primary" type="submit">
         Create Email
       </Button>

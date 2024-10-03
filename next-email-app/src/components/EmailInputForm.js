@@ -49,7 +49,7 @@ const EmailInputForm = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        width: "300px",
+        width: "450px",
         margin: "0 auto",
         gap: "1rem",
         padding: "2rem",

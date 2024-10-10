@@ -35,6 +35,10 @@
     "interactivity": {
         "detectsOn": "window",
         "events": {
+            "onHover": {
+                "enable": true,
+                "mode": "bubble"
+            },
             "onClick": {
                 "enable": true,
                 "mode": "push"
@@ -68,17 +72,13 @@
                 "distance": 200
             },
             "bubble": {
-                "distance": 400,
-                "duration": 2,
-                "mix": false,
-                "opacity": 0.8,
-                "size": 40,
-                "divs": {
-                    "distance": 200,
-                    "duration": 0.4,
-                    "mix": false,
-                    "selectors": {}
-                }
+                "distance": 250,
+                "size": 10,
+                "duration": 0.3,
+                "color": {
+                    "value": "#79ADDC"
+                },
+                "opacity": 1 
             },
             "connect": {
                 "distance": 80,

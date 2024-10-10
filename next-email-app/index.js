@@ -4,12 +4,16 @@ const { exec } = require("child_process");
 
 // Function to execute AppleScript for sending email via Outlook
 function sendEmailWithOutlook(name, email, text) {
+
+  // Escape double quotes in the text
+  const escapedText = text.replace(/"/g, '\\"');
+
   const appleScript = `
     set {ccName01, ccAddress01} to {"Example CC", "exampleCC@example.com"} -- 'Cc:' recipient.
     
     set the_Subject to "Example Subject"
 
-    set the_Content to ("<div>" & "Hello ${name}" & "</div>" & "<br>" & "Thank you for opting in for an email to ${email}" & "</br>" & "<br>" & "</br>" & "<br>" & "Here is some text:" & "</br>" & "<br>" & "${text}" & "</br>" & "<br>" & "</br>" & "<br>" & "</br>" & "<div>" & "Best," & "</div>")
+    set the_Content to ("<div>" & "Hello ${name}" & "</div>" & "<br>" & "Thank you for opting in for an email to ${email}" & "</br>" & "<br>" & "</br>" & "<br>" & "Here is some text:" & "</br>" & "<br>" & "${escapedText}" & "</br>" & "<br>" & "</br>" & "<br>" & "</br>" & "<div>" & "Best," & "</div>")
 
     tell application "Microsoft Outlook"
         

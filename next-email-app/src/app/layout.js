@@ -1,16 +1,4 @@
-import localFont from "next/font/local";
 import "./globals.css";
-import StyledDivider from "../components/StyledDivider";
-const geistSans = localFont({
-  src: "../../public/fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "../../public/fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata = {
   title: "Create Next App",
@@ -24,7 +12,7 @@ export default function RootLayout({ children }) {
         <title> Next Email App </title>
       </head>
 
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body>
         <main>{children}</main>
       </body>
     </html>

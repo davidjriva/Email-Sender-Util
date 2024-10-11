@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const { exec } = require("child_process");
+const log = require("electron-log");
 
 // Function to execute AppleScript for sending email via Outlook
 function sendEmailWithOutlook(name, email, text) {
@@ -39,15 +40,21 @@ function sendEmailWithOutlook(name, email, text) {
 }
 
 function createWindow() {
+  log.info("CREATING WINDOW");
+
   const mainWindow = new BrowserWindow({
-    width: 600,
+    width: 1200,
     height: 800,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"), // Optional: Preload script
+      // preload: path.join(__dirname, "preload.js"), // Optional: Preload script
       nodeIntegration: true, // Enable Node integration in renderer
       contextIsolation: false, // Ensure context isolation is off for IPC
+      devTools: true,
     },
   });
+
+  // Open DevTools manually in production for debugging
+  mainWindow.webContents.openDevTools();
 
   // Load your Next.js app
   mainWindow.loadURL("file://" + path.join(__dirname, "/out/index.html")); // Adjust based on your app build output
@@ -72,4 +79,9 @@ app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+  // Application-specific logging, throwing an error, or other logic here
 });

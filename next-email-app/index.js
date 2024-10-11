@@ -43,7 +43,6 @@ function createWindow() {
     width: 1200,
     height: 600,
     webPreferences: {
-      // preload: path.join(__dirname, "preload.js"), // Optional: Preload script
       nodeIntegration: true, // Enable Node integration in renderer
       contextIsolation: false, // Ensure context isolation is off for IPC
     },

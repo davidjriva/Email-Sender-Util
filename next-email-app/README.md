@@ -49,10 +49,14 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Production
 
-First, create the build artifact:
+First, clear all caches:
+`npm run clean`
+
+Then, create the build artifact:
 `npm run build`
 
 Next, replace `/_next` with `./_next` in `out/index.html`
+Also replace `/_next` with `./_next` in `out/_next/static/chunks/webpack-de7d1a83d3dc73b6.js`
 
 Finally, create the distribution:
 `npm run dist`

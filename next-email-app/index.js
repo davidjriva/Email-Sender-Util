@@ -1,7 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const { exec } = require("child_process");
-require("dotenv").config();
 
 // Function to execute AppleScript for sending email via Outlook
 function sendEmailWithOutlook(name, email, text) {
@@ -49,7 +48,7 @@ function createWindow() {
       contextIsolation: false, // Ensure context isolation is off for IPC
     },
   });
-  
+
   mainWindow.webContents.openDevTools();
 
   // Load your Next.js app

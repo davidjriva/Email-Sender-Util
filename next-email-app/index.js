@@ -4,6 +4,7 @@ const { exec } = require("child_process");
 
 // Function to execute AppleScript for sending email via Outlook
 function sendEmailWithOutlook(name, email, text) {
+
   // Escape double quotes in the text
   const escapedText = text.replace(/"/g, '\\"');
 
@@ -40,8 +41,8 @@ function sendEmailWithOutlook(name, email, text) {
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 600,
-    height: 800,
+    width: 800,
+    height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"), // Optional: Preload script
       nodeIntegration: true, // Enable Node integration in renderer

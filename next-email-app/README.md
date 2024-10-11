@@ -56,7 +56,7 @@ Then, create the build artifact:
 `npm run build`
 
 Next, replace `/_next` with `./_next` in `out/index.html`
-Also replace `/_next` with `./_next` in `out/_next/static/chunks/webpack-de7d1a83d3dc73b6.js`
+Also replace `/_next` with `./_next` in `out/_next/static/chunks/webpack-de7d1a83d3dc73b6.js` --> potentially automated in `next.config.mjs`
 
 Finally, create the distribution:
 `npm run dist`

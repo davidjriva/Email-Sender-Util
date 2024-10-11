@@ -1,4 +1,5 @@
-import styles from "./page.module.css";
+"use client";
+
 import EmailContainer from "../components/EmailContainer";
 
 const EmailPage = () => {

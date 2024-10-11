@@ -1,13 +1,15 @@
 "use client"; // Ensure the component is client-side only in Next.js
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, Button } from "@mui/material";
 import InputField from "./InputField";
 import TextInputField from "./TextInputField";
 
 let ipcRenderer;
-if (typeof window !== "undefined") {
-  ipcRenderer = window.require("electron").ipcRenderer; // Access ipcRenderer only in the client
+
+if (typeof window !== "undefined" && window.require) {
+  // Access ipcRenderer only in the client
+  ipcRenderer = window.require("electron").ipcRenderer;
 }
 
 const EmailInputForm = () => {
@@ -17,6 +19,11 @@ const EmailInputForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!name || !email || !text) {
+      alert("Please fill in all fields.");
+      return;
+    }
 
     try {
       if (ipcRenderer) {
@@ -51,12 +58,13 @@ const EmailInputForm = () => {
     >
       <InputField label="Name" value={name} setValue={setName} />
       <InputField label="Email" value={email} setValue={setEmail} />
-
       <TextInputField text={text} setText={setText} />
 
-      <Button variant="contained" type="submit" color="primary">
-        Send Email
-      </Button>
+      {typeof window !== "undefined" && window.require && (
+        <Button variant="contained" type="submit" color="primary">
+          Send Email
+        </Button>
+      )}
     </Box>
   );
 };

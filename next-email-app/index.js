@@ -1,10 +1,10 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const { exec } = require("child_process");
+require("dotenv").config();
 
 // Function to execute AppleScript for sending email via Outlook
 function sendEmailWithOutlook(name, email, text) {
-
   // Escape double quotes in the text
   const escapedText = text.replace(/"/g, '\\"');
 
@@ -41,14 +41,16 @@ function sendEmailWithOutlook(name, email, text) {
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 800,
+    width: 1200,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"), // Optional: Preload script
+      // preload: path.join(__dirname, "preload.js"), // Optional: Preload script
       nodeIntegration: true, // Enable Node integration in renderer
       contextIsolation: false, // Ensure context isolation is off for IPC
     },
   });
+  
+  mainWindow.webContents.openDevTools();
 
   // Load your Next.js app
   mainWindow.loadURL("file://" + path.join(__dirname, "/out/index.html")); // Adjust based on your app build output
@@ -73,4 +75,8 @@ app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
 });

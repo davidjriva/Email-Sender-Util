@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Box, Button } from "@mui/material";
 import InputField from "./InputField";
 import TextInputField from "./TextInputField";
+import DOMPurify from "dompurify";
 
 const EmailInputForm = () => {
   const [name, setName] = useState("");
@@ -18,10 +19,14 @@ const EmailInputForm = () => {
       return;
     }
 
+    const sanitizedName = DOMPurify.sanitize(name);
+    const sanitizedEmail = DOMPurify.sanitize(email);
+    const sanitizedText = DOMPurify.sanitize(text);
+
     try {
       if (window && window.electronAPI) {
         // Send form data to the Electron main process via IPC
-        window.electronAPI.send("send-email", { name, email, text });
+        window.electronAPI.send("send-email", { sanitizedName, sanitizedEmail, sanitizedText });
       } else {
         console.error("window or window.electronAPI is not available.");
         alert("Email sending functionality is not available.");

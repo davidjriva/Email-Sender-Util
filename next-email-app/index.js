@@ -12,7 +12,7 @@ function sendEmailWithOutlook(name, email, text) {
   // Sanitize inputs
   const safeName = sanitizeInput(name);
   const safeEmail = sanitizeInput(email);
-  const safeText = text.replace(/"/g, '\\"');   // Escape double quotes in the text
+  const safeText = text.replace(/"/g, '\\"'); // Escape double quotes in the text
 
   const appleScript = `
     set {ccName01, ccAddress01} to {"Example CC", "exampleCC@example.com"} -- 'Cc:' recipient.
@@ -65,9 +65,12 @@ function createWindow() {
 }
 
 // Listen for the IPC event from the renderer process
-ipcMain.on("send-email", (event, { name, email, text }) => {
-  sendEmailWithOutlook(name, email, text);
-});
+ipcMain.on(
+  "send-email",
+  (event, { sanitizedName, sanitizedEmail, sanitizedText }) => {
+    sendEmailWithOutlook(sanitizedName, sanitizedEmail, sanitizedText);
+  }
+);
 
 // Disables network access entirely
 app.commandLine.appendSwitch("disable-network-access");

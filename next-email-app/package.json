@@ -26,6 +26,7 @@
     },
     "files": [
       "index.js",
+      "preload.js",
       "out/**/*"
     ]
   },

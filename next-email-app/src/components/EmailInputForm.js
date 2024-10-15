@@ -5,13 +5,6 @@ import { Box, Button } from "@mui/material";
 import InputField from "./InputField";
 import TextInputField from "./TextInputField";
 
-let ipcRenderer;
-
-if (typeof window !== "undefined" && window.require) {
-  // Access ipcRenderer only in the client
-  ipcRenderer = window.require("electron").ipcRenderer;
-}
-
 const EmailInputForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -26,12 +19,11 @@ const EmailInputForm = () => {
     }
 
     try {
-      if (ipcRenderer) {
+      if (window && window.electronAPI) {
         // Send form data to the Electron main process via IPC
-        ipcRenderer.send("send-email", { name, email, text });
-        alert("Email is being processed in Outlook.");
+        window.electronAPI.send("send-email", { name, email, text });
       } else {
-        console.error("ipcRenderer is not available.");
+        console.error("window or window.electronAPI is not available.");
         alert("Email sending functionality is not available.");
       }
     } catch (error) {

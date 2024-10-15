@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, session } = require("electron");
 const path = require("path");
 const { exec } = require("child_process");
 
@@ -43,8 +43,9 @@ function createWindow() {
     width: 1200,
     height: 600,
     webPreferences: {
-      nodeIntegration: true, // Enable Node integration in renderer
-      contextIsolation: false, // Ensure context isolation is off for IPC
+      nodeIntegration: false, // Enable Node integration in renderer
+      contextIsolation: true, // Ensure context isolation is off for IPC
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
@@ -58,6 +59,9 @@ function createWindow() {
 ipcMain.on("send-email", (event, { name, email, text }) => {
   sendEmailWithOutlook(name, email, text);
 });
+
+// Disables network access entirely
+app.commandLine.appendSwitch("disable-network-access");
 
 // Electron initialization
 app.whenReady().then(createWindow);

@@ -2,17 +2,24 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const { exec } = require("child_process");
 
+// Sanitize user input to only alphanumeric characters, letters, numbers, spaces, and some special characters
+function sanitizeInput(input) {
+  return input.replace(/[^a-zA-Z0-9_ @.]/g, ""); // Allow letters, numbers, spaces, and some special characters
+}
+
 // Function to execute AppleScript for sending email via Outlook
 function sendEmailWithOutlook(name, email, text) {
-  // Escape double quotes in the text
-  const escapedText = text.replace(/"/g, '\\"');
+  // Sanitize inputs
+  const safeName = sanitizeInput(name);
+  const safeEmail = sanitizeInput(email);
+  const safeText = text.replace(/"/g, '\\"');   // Escape double quotes in the text
 
   const appleScript = `
     set {ccName01, ccAddress01} to {"Example CC", "exampleCC@example.com"} -- 'Cc:' recipient.
     
     set the_Subject to "Example Subject"
 
-    set the_Content to ("<div>" & "Hello ${name}" & "</div>" & "<br>" & "Thank you for opting in for an email to ${email}" & "</br>" & "<br>" & "</br>" & "<br>" & "Here is some text:" & "</br>" & "<br>" & "${escapedText}" & "</br>" & "<br>" & "</br>" & "<br>" & "</br>" & "<div>" & "Best," & "</div>")
+    set the_Content to ("<div>" & "Hello ${safeName}" & "</div>" & "<br>" & "Thank you for opting in for an email to ${safeEmail}" & "</br>" & "<br>" & "</br>" & "<br>" & "Here is some text:" & "</br>" & "<br>" & "${safeText}" & "</br>" & "<br>" & "</br>" & "<br>" & "</br>" & "<div>" & "Best," & "</div>")
 
     tell application "Microsoft Outlook"
         

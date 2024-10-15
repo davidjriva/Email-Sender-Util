@@ -52,7 +52,7 @@ const EmailInputForm = () => {
       <InputField label="Email" value={email} setValue={setEmail} />
       <TextInputField text={text} setText={setText} />
 
-      {typeof window !== "undefined" && window.require && (
+      {typeof window !== "undefined" && window.electronAPI && (
         <Button variant="contained" type="submit" color="primary">
           Send Email
         </Button>

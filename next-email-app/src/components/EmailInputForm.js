@@ -19,14 +19,20 @@ const EmailInputForm = () => {
       return;
     }
 
+    const formattedText = text.replace(/\n/g, "<br>");
+
     const sanitizedName = DOMPurify.sanitize(name);
     const sanitizedEmail = DOMPurify.sanitize(email);
-    const sanitizedText = DOMPurify.sanitize(text);
+    const sanitizedText = DOMPurify.sanitize(formattedText);
 
     try {
       if (window && window.electronAPI) {
         // Send form data to the Electron main process via IPC
-        window.electronAPI.send("send-email", { sanitizedName, sanitizedEmail, sanitizedText });
+        window.electronAPI.send("send-email", {
+          sanitizedName,
+          sanitizedEmail,
+          sanitizedText,
+        });
       } else {
         console.error("window or window.electronAPI is not available.");
         alert("Email sending functionality is not available.");

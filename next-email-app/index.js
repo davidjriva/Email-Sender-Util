@@ -1,18 +1,35 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const { exec } = require("child_process");
+const DOMPurify = require("dompurify");
+const { JSDOM } = require("jsdom");
+const validator = require("validator");
 
-// Sanitize user input to only alphanumeric characters, letters, numbers, spaces, and some special characters
-function sanitizeInput(input) {
-  return input.replace(/[^a-zA-Z0-9_ @.]/g, ""); // Allow letters, numbers, spaces, and some special characters
+// Setup DOMPurify instance with JSDOM
+const window = new JSDOM("").window;
+const purify = DOMPurify(window);
+
+// Sanitize HTML content
+function sanitizeHTML(input) {
+  return purify.sanitize(input);
+}
+
+// Function to validate email format
+function isValidEmail(email) {
+  return validator.isEmail(email);
+}
+
+function isValidName(name) {
+  return /^[a-zA-Z\s]*$/.test(name);
 }
 
 // Function to execute AppleScript for sending email via Outlook
 function sendEmailWithOutlook(name, email, text) {
   // Sanitize inputs
-  const safeName = sanitizeInput(name);
-  const safeEmail = sanitizeInput(email);
-  const safeText = text.replace(/"/g, '\\"'); // Escape double quotes in the text
+  const safeName = isValidName(name) ? name : "";
+  const safeEmail = isValidEmail(email) ? email : "";
+
+  const safeText = sanitizeHTML(text).replace(/"/g, '\\"'); // Sanitize any HTML in the body and escape any double quotes in the text
 
   const appleScript = `
     set {ccName01, ccAddress01} to {"Example CC", "exampleCC@example.com"} -- 'Cc:' recipient.

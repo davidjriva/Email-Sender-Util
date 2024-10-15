@@ -43,9 +43,9 @@ function createWindow() {
     width: 1200,
     height: 600,
     webPreferences: {
-      nodeIntegration: false, // Enable Node integration in renderer
-      contextIsolation: true, // Ensure context isolation is off for IPC
-      preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: false, // Disables Node integration in renderer
+      contextIsolation: true, // Isolates context for security
+      preload: path.join(__dirname, "preload.js"), // Use a secure preloading script for IPC
     },
   });
 

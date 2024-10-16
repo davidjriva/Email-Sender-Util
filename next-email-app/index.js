@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
-const { execFile } = require("child_process");
+const { spawn } = require("child_process");
 const DOMPurify = require("dompurify");
 const { JSDOM } = require("jsdom");
 const validator = require("validator");
@@ -28,8 +28,8 @@ function containsHTMLTags(input) {
   return htmlTagRegex.test(input); // Returns true if HTML tags are found
 }
 
-// Function to execute AppleScript for sending email via Outlook
-function sendEmailWithOutlook(name, email, text) {
+// Function to spawn child process for sending email
+function sendEmail(name, email, text) {
   // Sanitize inputs
   const safeName = isValidName(name) ? name : "";
   const safeEmail = isValidEmail(email) ? email : "";
@@ -40,36 +40,26 @@ function sendEmailWithOutlook(name, email, text) {
   }
 
   const formattedText = text.replace(/\n/g, "<br>"); // Replace newlines with breaks.
-  const safeText = sanitizeHTML(formattedText).replace(/"/g, '\\"'); // Sanitize any HTML in the body and escape any double quotes in the text
+  const safeText = sanitizeHTML(formattedText).replace(/"/g, '\\"'); // Sanitize any HTML in the body
 
-  const appleScript = `
-    set {ccName01, ccAddress01} to {"Example CC", "exampleCC@example.com"} -- 'Cc:' recipient.
-    
-    set the_Subject to "Example Subject"
+  // Spawn a child process for sending the email
+  const child = spawn("node", [
+    path.join(__dirname, "sendEmail.js"),
+    safeName,
+    safeEmail,
+    safeText,
+  ]);
 
-    set the_Content to ("<div>" & "Hello ${safeName}" & "</div>" & "<br>" & "Thank you for opting in for an email to ${safeEmail}" & "</br>" & "<br>" & "</br>" & "<br>" & "Here is some text:" & "</br>" & "<br>" & "${safeText}" & "</br>" & "<br>" & "</br>" & "<br>" & "</br>" & "<div>" & "Best," & "</div>")
+  child.stdout.on("data", (data) => {
+    console.log(`Child process output: ${data}`);
+  });
 
-    tell application "Microsoft Outlook"
-        
-    set ComplaintMessage to make new outgoing message with properties {subject:the_Subject, content:the_Content}
-    
-    make new cc recipient at ComplaintMessage with properties {email address:{name:ccName01, address:ccAddress01}}
+  child.stderr.on("data", (data) => {
+    console.error(`Child process error: ${data}`);
+  });
 
-    open ComplaintMessage
-
-    end tell
-    `;
-
-  execFile("osascript", ["-e", appleScript], (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error executing AppleScript: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.error(`AppleScript error: ${stderr}`);
-      return;
-    }
-    console.log(`AppleScript output: ${stdout}`);
+  child.on("close", (code) => {
+    console.log(`Child process exited with code ${code}`);
   });
 }
 
@@ -96,7 +86,7 @@ function createWindow() {
 ipcMain.on(
   "send-email",
   (event, { sanitizedName, sanitizedEmail, sanitizedText }) => {
-    sendEmailWithOutlook(sanitizedName, sanitizedEmail, sanitizedText);
+    sendEmail(sanitizedName, sanitizedEmail, sanitizedText);
   }
 );
 

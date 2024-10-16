@@ -1,18 +1,42 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const { exec } = require("child_process");
+const DOMPurify = require("dompurify");
+const { JSDOM } = require("jsdom");
+const validator = require("validator");
+
+// Setup DOMPurify instance with JSDOM
+const window = new JSDOM("").window;
+const purify = DOMPurify(window);
+
+// Sanitize HTML content
+function sanitizeHTML(input) {
+  return purify.sanitize(input);
+}
+
+// Function to validate email format
+function isValidEmail(email) {
+  return validator.isEmail(email);
+}
+
+function isValidName(name) {
+  return /^[a-zA-Z\s]*$/.test(name);
+}
 
 // Function to execute AppleScript for sending email via Outlook
 function sendEmailWithOutlook(name, email, text) {
-  // Escape double quotes in the text
-  const escapedText = text.replace(/"/g, '\\"');
+  // Sanitize inputs
+  const safeName = isValidName(name) ? name : "";
+  const safeEmail = isValidEmail(email) ? email : "";
+
+  const safeText = sanitizeHTML(text).replace(/"/g, '\\"'); // Sanitize any HTML in the body and escape any double quotes in the text
 
   const appleScript = `
     set {ccName01, ccAddress01} to {"Example CC", "exampleCC@example.com"} -- 'Cc:' recipient.
     
     set the_Subject to "Example Subject"
 
-    set the_Content to ("<div>" & "Hello ${name}" & "</div>" & "<br>" & "Thank you for opting in for an email to ${email}" & "</br>" & "<br>" & "</br>" & "<br>" & "Here is some text:" & "</br>" & "<br>" & "${escapedText}" & "</br>" & "<br>" & "</br>" & "<br>" & "</br>" & "<div>" & "Best," & "</div>")
+    set the_Content to ("<div>" & "Hello ${safeName}" & "</div>" & "<br>" & "Thank you for opting in for an email to ${safeEmail}" & "</br>" & "<br>" & "</br>" & "<br>" & "Here is some text:" & "</br>" & "<br>" & "${safeText}" & "</br>" & "<br>" & "</br>" & "<br>" & "</br>" & "<div>" & "Best," & "</div>")
 
     tell application "Microsoft Outlook"
         
@@ -43,8 +67,11 @@ function createWindow() {
     width: 1200,
     height: 600,
     webPreferences: {
-      nodeIntegration: true, // Enable Node integration in renderer
-      contextIsolation: false, // Ensure context isolation is off for IPC
+      nodeIntegration: false, // Disables Node integration in renderer
+      contextIsolation: true, // Isolates context for security
+      enableRemoteModule: false, // Disables remote module
+      webviewTag: false, // Block all web view tags
+      preload: path.join(__dirname, "preload.js"), // Use a secure preloading script for IPC
     },
   });
 
@@ -55,9 +82,18 @@ function createWindow() {
 }
 
 // Listen for the IPC event from the renderer process
-ipcMain.on("send-email", (event, { name, email, text }) => {
-  sendEmailWithOutlook(name, email, text);
-});
+ipcMain.on(
+  "send-email",
+  (event, { sanitizedName, sanitizedEmail, sanitizedText }) => {
+    sendEmailWithOutlook(sanitizedName, sanitizedEmail, sanitizedText);
+  }
+);
+
+// Disables network access entirely
+app.commandLine.appendSwitch("disable-network-access");
+
+// Enable sandbox for all processes
+app.enableSandbox();
 
 // Electron initialization
 app.whenReady().then(createWindow);

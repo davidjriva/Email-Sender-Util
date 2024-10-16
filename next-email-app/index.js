@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
-const { exec } = require("child_process");
+const { execFile } = require("child_process");
 const DOMPurify = require("dompurify");
 const { JSDOM } = require("jsdom");
 const validator = require("validator");
@@ -49,7 +49,7 @@ function sendEmailWithOutlook(name, email, text) {
     end tell
     `;
 
-  exec(`osascript -e '${appleScript}'`, (error, stdout, stderr) => {
+  execFile("osascript", ["-e", appleScript], (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing AppleScript: ${error.message}`);
       return;

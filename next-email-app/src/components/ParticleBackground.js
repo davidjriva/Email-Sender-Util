@@ -258,7 +258,7 @@ const options = {
       },
       random: false,
       size: false,
-      speed: 0.5,
+      speed: 0.1,
       spin: {
         acceleration: 0,
         enable: false,

@@ -19,11 +19,9 @@ const EmailInputForm = () => {
       return;
     }
 
-    const formattedText = text.replace(/\n/g, "<br>");
-
     const sanitizedName = DOMPurify.sanitize(name);
     const sanitizedEmail = DOMPurify.sanitize(email);
-    const sanitizedText = DOMPurify.sanitize(formattedText);
+    const sanitizedText = DOMPurify.sanitize(text);
 
     try {
       if (window && window.electronAPI) {

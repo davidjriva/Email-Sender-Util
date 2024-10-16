@@ -23,13 +23,24 @@ function isValidName(name) {
   return /^[a-zA-Z\s]*$/.test(name);
 }
 
+function containsHTMLTags(input) {
+  const htmlTagRegex = /<[^>]+>/; // Regex to detect HTML tags
+  return htmlTagRegex.test(input); // Returns true if HTML tags are found
+}
+
 // Function to execute AppleScript for sending email via Outlook
 function sendEmailWithOutlook(name, email, text) {
   // Sanitize inputs
   const safeName = isValidName(name) ? name : "";
   const safeEmail = isValidEmail(email) ? email : "";
 
-  const safeText = sanitizeHTML(text).replace(/"/g, '\\"'); // Sanitize any HTML in the body and escape any double quotes in the text
+  if (containsHTMLTags(text)) {
+    console.log(`HTML tags are not allowed in text: ${text}.`);
+    return;
+  }
+
+  const formattedText = text.replace(/\n/g, "<br>"); // Replace newlines with breaks.
+  const safeText = sanitizeHTML(formattedText).replace(/"/g, '\\"'); // Sanitize any HTML in the body and escape any double quotes in the text
 
   const appleScript = `
     set {ccName01, ccAddress01} to {"Example CC", "exampleCC@example.com"} -- 'Cc:' recipient.

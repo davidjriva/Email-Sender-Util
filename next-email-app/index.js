@@ -1,9 +1,9 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
-const { spawn } = require("child_process");
 const DOMPurify = require("dompurify");
 const { JSDOM } = require("jsdom");
 const validator = require("validator");
+const applescript = require("applescript");
 
 // Setup DOMPurify instance with JSDOM
 const window = new JSDOM("").window;
@@ -43,23 +43,26 @@ function sendEmail(name, email, text) {
   const safeText = sanitizeHTML(formattedText).replace(/"/g, '\\"'); // Sanitize any HTML in the body
 
   // Spawn a child process for sending the email
-  const child = spawn("node", [
-    path.join(__dirname, "sendEmail.js"),
-    safeName,
-    safeEmail,
-    safeText,
-  ]);
+  const script = `
+  set {ccName01, ccAddress01} to {"Example CC", "exampleCC@example.com"} -- 'Cc:' recipient.
+  
+  set the_Subject to "Example Subject"
 
-  child.stdout.on("data", (data) => {
-    console.log(`Child process output: ${data}`);
-  });
+  set the_Content to ("<div>" & "Hello ${safeName}" & "</div>" & "<br>" & "Thank you for opting in for an email to ${safeEmail}" & "</br>" & "<br>" & "</br>" & "<br>" & "Here is some text:" & "</br>" & "<br>" & "${safeText}" & "</br>" & "<br>" & "</br>" & "<br>" & "</br>" & "<div>" & "Best," & "</div>")
 
-  child.stderr.on("data", (data) => {
-    console.error(`Child process error: ${data}`);
-  });
+  tell application "Microsoft Outlook"
+      set ComplaintMessage to make new outgoing message with properties {subject:the_Subject, content:the_Content}
+      make new cc recipient at ComplaintMessage with properties {email address:{name:ccName01, address:ccAddress01}}
+      open ComplaintMessage
+  end tell
+`;
 
-  child.on("close", (code) => {
-    console.log(`Child process exited with code ${code}`);
+  applescript.execString(script, (err, result) => {
+    if (err) {
+      console.error(`Error executing AppleScript: ${err}`);
+      return;
+    }
+    console.log(`AppleScript result: ${result}`);
   });
 }
 

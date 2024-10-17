@@ -1,30 +1,11 @@
-const DOMPurify = require("dompurify");
-const { JSDOM } = require("jsdom");
-const validator = require("validator");
 const applescript = require("applescript");
-
-// Setup DOMPurify instance with JSDOM
-const window = new JSDOM("").window;
-const purify = DOMPurify(window);
-
-// Sanitize HTML content
-function sanitizeHTML(input) {
-  return purify.sanitize(input);
-}
-
-// Function to validate email format
-function isValidEmail(email) {
-  return validator.isEmail(email);
-}
-
-function isValidName(name) {
-  return /^[a-zA-Z\s]*$/.test(name);
-}
-
-function containsHTMLTags(input) {
-  const htmlTagRegex = /<[^>]+>/; // Regex to detect HTML tags
-  return htmlTagRegex.test(input); // Returns true if HTML tags are found
-}
+const path = require("path");
+const {
+  isValidName,
+  isValidEmail,
+  containsHTMLTags,
+  sanitizeHTML,
+} = require(path.join(__dirname, "emailValidator.js"));
 
 // Function to spawn child process for sending email
 function sendEmail(name, email, text) {
@@ -60,7 +41,6 @@ function sendEmail(name, email, text) {
       console.error(`Error executing AppleScript: ${err}`);
       return;
     }
-    console.log(`AppleScript result: ${result}`);
   });
 }
 

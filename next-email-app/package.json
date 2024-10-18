@@ -7,7 +7,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "obfuscate": "javascript-obfuscator ./out/_next --output ./out/_next",
     "build": "next build",
+    "build:app": "npm run build && python3 print_stage.py 1 && python3 format_index.py && python3 print_stage.py 2 && npm run obfuscate && python3 print_stage.py 3 && npm run dist && python3 print_stage.py 4 && cp ./dist/Next\\ Email\\ App-1.0.0-arm64.dmg ~/Desktop && python3 print_stage.py 5",
+    "print-stage": "printf '%*s\n' \"$(tput cols)\" '' | tr ' ' '-' && echo '------- STAGE COMPLETE ---------' && printf '%*s\n' \"$(tput cols)\" '' | tr ' ' '-'",
     "start": "npx serve@latest out",
     "lint": "next lint",
     "export": "next export",
@@ -16,10 +19,15 @@
     "clean": "rimraf dist node_modules"
   },
   "build": {
-    "appId": "com.yourname.nextemailapp",
+    "appId": "com.davidriva.nextemailapp",
     "productName": "Next Email App",
+    "asar": true,
     "mac": {
-      "category": "public.app-category.productivity"
+      "category": "public.app-category.productivity",
+      "hardenedRuntime": true,
+      "target": [
+        "dmg"
+      ]
     },
     "directories": {
       "output": "dist"
@@ -27,6 +35,8 @@
     "files": [
       "index.js",
       "preload.js",
+      "sendEmail.js",
+      "emailValidator.js",
       "out/**/*"
     ]
   },
@@ -36,6 +46,7 @@
     "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.1.1",
     "@tsparticles/react": "^3.0.0",
+    "applescript": "^1.0.0",
     "dompurify": "^3.1.7",
     "jsdom": "^25.0.1",
     "next": "14.2.14",
@@ -49,6 +60,7 @@
   "devDependencies": {
     "electron": "^32.1.2",
     "electron-builder": "^25.0.5",
+    "javascript-obfuscator": "^4.1.1",
     "rimraf": "^6.0.1"
   }
 }

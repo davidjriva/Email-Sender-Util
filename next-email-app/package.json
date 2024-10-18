@@ -16,10 +16,11 @@
     "clean": "rimraf dist node_modules"
   },
   "build": {
-    "appId": "com.yourname.nextemailapp",
+    "appId": "com.davidriva.nextemailapp",
     "productName": "Next Email App",
     "mac": {
       "category": "public.app-category.productivity",
+      "hardenedRuntime": true,
       "target": ["dmg"]
     },
     "directories": {

@@ -23,44 +23,43 @@ protocol.registerSchemesAsPrivileged([
 function setupProtocol() {
   protocol.handle("app", async (req) => {
     const { pathname } = new URL(req.url);
+    const safeBasePath = path.resolve(__dirname, "out");
+    const filePath = path.join(safeBasePath, pathname);
 
-    const safeBasePath = path.resolve(__dirname, "out"); // Base directory for files
-    const filePath = path.resolve(safeBasePath, "." + pathname); // Resolve file path
-
-    // Ensure the resolved path is within the allowed base directory
     if (!filePath.startsWith(safeBasePath)) {
-      return new Response("Access denied", {
-        status: 403,
-        headers: { "content-type": "text/html" },
-      });
+      return createResponse("Access denied", 403);
     }
 
-    // Only allow access to `index.html` or files in `_next/static/chunks` or `_next/static/chunks/app`
-    const isIndexHtml = filePath === path.join(safeBasePath, "index.html");
-    const isInNextChunks = filePath.startsWith(
-      path.join(safeBasePath, "_next/static/chunks")
-    );
-    const isInNextChunksApp = filePath.startsWith(
-      path.join(safeBasePath, "_next/static/chunks/app")
-    );
+    const allowedPaths = [
+      path.join(safeBasePath, "index.html"),
+      path.join(safeBasePath, "_next", "static", "chunks"),
+      path.join(safeBasePath, "_next", "static", "chunks", "app"),
+    ];
 
-    if (!(isIndexHtml || isInNextChunks || isInNextChunksApp)) {
-      return new Response("File not allowed", {
-        status: 400,
-        headers: { "content-type": "text/html" },
-      });
+    if (!allowedPaths.some((allowedPath) => filePath.startsWith(allowedPath))) {
+      return createResponse("File not allowed", 400);
     }
 
-    // Check for file existence before serving
-    if (!fs.existsSync(filePath)) {
-      return new Response("File not found", {
-        status: 404,
-        headers: { "content-type": "text/html" },
-      });
-    }
+    try {
+      // Check for file existence before serving
+      if (!fs.existsSync(filePath)) {
+        return new Response("File not found", {
+          status: 404,
+          headers: { "content-type": "text/html" },
+        });
+      }
 
-    // Serve the requested file
-    return net.fetch(pathToFileURL(filePath).toString());
+      return net.fetch(pathToFileURL(filePath).toString());
+    } catch (error) {
+      return createResponse("File not found", 404);
+    }
+  });
+}
+
+function createResponse(message, status) {
+  return new Response(message, {
+    status,
+    headers: { "content-type": "text/html" },
   });
 }
 
@@ -70,7 +69,7 @@ function setupProtocol() {
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 1200,
+    width: 600,
     height: 600,
     webPreferences: {
       nodeIntegration: false, // Disables Node integration in renderer
@@ -83,7 +82,7 @@ function createWindow() {
     },
   });
 
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // Load your Next.js app
   mainWindow.loadURL("app://bundle/index.html"); // Adjust based on your app build output

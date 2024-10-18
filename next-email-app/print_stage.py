@@ -3,6 +3,7 @@ import os
 
 def print_stage(stage_number):
     stage_identifiers = {
+        "0": "Installing package dependencies",
         "1": "Building Next.js application",
         "2": "Formatting index.html",
         "3": "Obfuscating Next.js JavaScript build code",
@@ -11,11 +12,12 @@ def print_stage(stage_number):
     }
 
     stage_icons = {
+        "0": "🔽 📦 📦 📦 🔽",
         "1": "🧱 🚜 🦺 🚧 🔧",
         "2": "📝 📝 📝 📝 📝",
-        "3": "😵‍💫 🤔 💫 🥴 😵‍💫",
+        "3": "😵‍💫 😵‍💫 😵‍💫 😵‍💫 😵‍💫",
         "4": "🏡 🏬 🏫 🏢 🏦",
-        "5": "✅ 🏃 🏃‍♂️‍➡️ ⏩ 🖥️ "
+        "5": "🔼 🖥️ 🖥️ 🖥️ 🔼"
     }
 
     # Check if the stage number exists in the identifiers

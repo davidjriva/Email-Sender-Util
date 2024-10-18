@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "obfuscate": "javascript-obfuscator ./out/_next --output ./out/_next",
     "build": "next build",
     "start": "npx serve@latest out",
     "lint": "next lint",
@@ -18,10 +19,13 @@
   "build": {
     "appId": "com.davidriva.nextemailapp",
     "productName": "Next Email App",
+    "asar": true,
     "mac": {
       "category": "public.app-category.productivity",
       "hardenedRuntime": true,
-      "target": ["dmg"]
+      "target": [
+        "dmg"
+      ]
     },
     "directories": {
       "output": "dist"
@@ -54,6 +58,7 @@
   "devDependencies": {
     "electron": "^32.1.2",
     "electron-builder": "^25.0.5",
+    "javascript-obfuscator": "^4.1.1",
     "rimraf": "^6.0.1"
   }
 }

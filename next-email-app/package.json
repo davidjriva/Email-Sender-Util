@@ -9,6 +9,8 @@
     "dev": "next dev",
     "obfuscate": "javascript-obfuscator ./out/_next --output ./out/_next",
     "build": "next build",
+    "build:app": "npm run build && python3 print_stage.py 1 && python3 format_index.py && python3 print_stage.py 2 && npm run obfuscate && python3 print_stage.py 3 && npm run dist && python3 print_stage.py 4 && cp ./dist/Next\\ Email\\ App-1.0.0-arm64.dmg ~/Desktop && python3 print_stage.py 5",
+    "print-stage": "printf '%*s\n' \"$(tput cols)\" '' | tr ' ' '-' && echo '------- STAGE COMPLETE ---------' && printf '%*s\n' \"$(tput cols)\" '' | tr ' ' '-'",
     "start": "npx serve@latest out",
     "lint": "next lint",
     "export": "next export",

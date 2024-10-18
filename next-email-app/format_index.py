@@ -4,6 +4,8 @@ import re
 # File to modify
 file_path = "./out/index.html"
 
+print("Formatting index.html...")
+
 # Check if the file exists
 if not os.path.isfile(file_path):
     print(f"File not found: {file_path}")
@@ -22,4 +24,5 @@ content = content.replace("../_next", "./_next")
 with open(file_path, 'w') as file:
     file.write(content)
 
+print("✅ Formatting index.html is complete!")
 print(f"Replaced all instances of '/_next' with './_next' and '../_next' with './_next' (preserving quotes) in {file_path}")
